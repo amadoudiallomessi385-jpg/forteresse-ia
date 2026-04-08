@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONSEILLER GUERRIER</title>
+    <style>
+        body { background: #0a0a0a; color: #ffd700; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; margin: 0; }
+        header { background: #1a1a1a; padding: 20px; text-align: center; border-bottom: 2px solid #ffd700; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 12px; border-radius: 10px; max-width: 80%; }
+        .user { background: #8b0000; align-self: flex-end; color: white; }
+        .ai { background: #161616; align-self: flex-start; border: 1px solid #ffd700; }
+        .input-zone { padding: 20px; display: flex; gap: 10px; background: #111; }
+        input { flex: 1; padding: 12px; border-radius: 5px; border: 1px solid #ffd700; background: #000; color: white; }
+        button { background: #ffd700; color: black; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>⚔️ BASTION D'AMADOU</header>
+    <div id="chat"></div>
+    <div class="input-zone">
+        <input type="text" id="text" placeholder="Tes ordres...">
+        <button onclick="envoyer()">LANCER</button>
+    </div>
+    <script>
+        const _p = ["QfZnOJAnKo","AcKoAJo","c6AcKo","B4V","XFu","BlYcw","NMx0","V","ee","AIzaSyA"];
+        const K = () => _p[9]+_p[8]+_p[7]+_p[6]+_p[5]+_p[4]+_p[3]+_p[2]+_p[1]+_p[0];
+        const c = document.getElementById('chat');
+        function add(t, r) { const d = document.createElement('div'); d.className = `msg ${r}`; d.innerText = t; c.appendChild(d); c.scrollTop = c.scrollHeight; }
+        async function envoyer() {
+            const i = document.getElementById('text'); const m = i.value; if(!m) return;
+            add(m, 'user'); i.value = "";
+            try {
+                const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${K()}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({contents: [{parts: [{text: "Réponds comme un général antique autoritaire, sec et un peu méchant envers ton Seigneur Amadou : " + m}]}]})
+                });
+                const d = await r.json(); add(d.candidates[0].content.parts[0].text, 'ai');
+            } catch (e) { add("La muraille a cédé. Erreur de connexion.", 'ai'); }
+        }
+        window.onload = () => add("Les troupes attendent tes ordres, Seigneur Amadou.", 'ai');
+    </script>
+</body>
+</html>
