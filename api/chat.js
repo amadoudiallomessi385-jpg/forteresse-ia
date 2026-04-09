@@ -18,9 +18,9 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0].content.parts[0].text) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            res.status(500).json({ reply: "Le Gardien n'a pas pu formuler de réponse." });
+            res.status(500).json({ reply: "L'IA n'a pas pu répondre." });
         }
     } catch (error) {
-        res.status(500).json({ error: "La liaison avec le Gardien a échoué." });
+        res.status(500).json({ error: "Liaison API échouée" });
     }
 }
